@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dewmi’s 19th Birthday ❤️</title>
+
+  <style>
+    :root{
+      --bg1:#ff9a9e;
+      --bg2:#fad0c4;
+      --card:#ffffffee;
+      --text:#2b2b2b;
+      --accent:#ff3d7f;
+      --accent2:#6c63ff;
+      --shadow: 0 18px 45px rgba(0,0,0,.16);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    /* Floating hearts background */
+    #hearts{
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events:none;
+      opacity: 0.85;
+    }
+
+    .screen{
+      display:none;
+      min-height:100vh;
+      padding:22px;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+      z-index: 1; /* above hearts */
+    }
+    .screen.active{ display:flex; }
+
+    .card{
+      width:min(900px, 95vw);
+      background:var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(6px);
+    }
+
+    header{
+      padding:18px 18px 12px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+    header .title{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    header h1{
+      margin:0;
+      font-size:22px;
+      letter-spacing:.2px;
+    }
+    header p{
+      margin:0;
+      opacity:.75;
+      font-size:13px;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fff;
+      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+      user-select:none;
+    }
+
+    .content{ padding:18px; }
+
+    .row{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:0;
+      padding:12px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:650;
+      background: #fff;
+      border:1px solid rgba(0,0,0,.1);
+      transition: transform .06s ease, box-shadow .2s ease;
+      user-select:none;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), #ff7aa8);
+      color:#fff;
+      border:0;
+    }
+    .btn.secondary{
+      background: linear-gradient(135deg, var(--accent2), #9b93ff);
+      color:#fff;
+      border:0;
+    }
+    .btn.ghost{ background: transparent; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+    }
+    .col-7{ grid-column: span 7; }
+    .col-5{ grid-column: span 5; }
+    .col-12{ grid-column: span 12; }
+
+    @media (max-width: 860px){
+      .col-7,.col-5{ grid-column: span 12; }
+    }
+
+    .panel{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius: 18px;
+      padding:14px;
+      box-shadow: 0 12px 25px rgba(0,0,0,.08);
+    }
+
+    .big{
+      font-size:38px;
+      margin:10px 0 8px;
+      line-height:1.1;
+    }
+    .sub{
+      margin:0 0 14px;
+      opacity:.85;
+      line-height: 1.55;
+    }
+
+    /* Letters */
+    .letters{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      max-height: 380px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .letter{
+      padding:14px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff, #fff7fb);
+      border:1px solid rgba(0,0,0,.06);
+    }
+    .letter h3{ margin:0 0 6px; }
+    .letter p{ margin:0; opacity:.92; line-height:1.55; }
+
+    /* Gallery */
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 700px){
+      .gallery{ grid-template-columns: repeat(2, 1fr); }
+    }
+    .photo{
+      position:relative;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fff;
+      cursor:pointer;
+      aspect-ratio: 1 / 1;
+      display:grid;
+      place-items:center;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .photo span{
+      padding:12px;
+      opacity:.7;
+      font-size:13px;
+      text-align:center;
+    }
+
+    /* Modal */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(6px);
+      display:none;
+      place-items:center;
+      z-index:9999;
+      padding:18px;
+    }
+    .overlay.show{ display:grid; }
+
+    .modal{
+      width:min(980px, 96vw);
+      background:#fff;
+      border-radius: 22px;
+      overflow:hidden;
+      box-shadow: 0 24px 70px rgba(0,0,0,.35);
+    }
+    .modalHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      gap:10px;
+    }
+    .modalHead b{ font-size:14px; opacity:.9; }
+    .modalBody{ padding:14px; display:grid; gap:12px; }
+    .modalImg{
+      width:100%;
+      max-height: 70vh;
+      object-fit:contain;
+      border-radius: 18px;
+      background:#fafafa;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .modalCaption{ opacity:.88; line-height:1.55; }
+
+    /* Slideshow */
+    .slideBox{ display:grid; gap:10px; }
+    .slideImg{
+      width:100%;
+      aspect-ratio: 16/9;
+      object-fit:cover;
+      border-radius: 18px;
+      border:1px solid rgba(0,0,0,.08);
+      background:#fafafa;
+    }
+    .slideControls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .muted{ opacity:.75; font-size:13px; }
+
+    /* Game */
+    .gameGrid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 520px){
+      .gameGrid{ grid-template-columns: repeat(3, 1fr); }
+    }
+    .gameCard{
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      border:1px solid rgba(0,0,0,.1);
+      background: linear-gradient(135deg, #fff, #fff3f8);
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      font-size:22px;
+      cursor:pointer;
+      user-select:none;
+      overflow:hidden;
+    }
+    .gameCard.revealed{
+      background: linear-gradient(135deg, #ffe1ed, #fff);
+      border-color: rgba(255, 61, 127, .5);
+    }
+    .gameCard.done{ opacity:.6; cursor:default; }
+
+    footer{
+      padding:14px 18px 18px;
+      border-top:1px solid rgba(0,0,0,.06);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background hearts -->
+  <canvas id="hearts"></canvas>
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>🎂 Happy 19th Birthday, <span id="personName">Dewmi</span> ❤️</h1>
+          <p>Every page here is a little “I love you” made for you.</p>
+        </div>
+        <div class="pill" title="Tap once anywhere if sound doesn't start (browser rule)">
+          <span>🔊 Music</span>
+          <button class="btn ghost" id="toggleMusicBtn">Off</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="grid">
+          <div class="panel col-7">
+            <div class="big">Hi Dewmi ✨</div>
+            <p class="sub">
+              Today you turn <b>19</b> — and honestly… I’m just grateful I get to exist in the same world as you.
+              This is your little birthday universe: letters, photos, a slideshow, and a tiny game.
+              I hope it makes your heart feel warm the way you make mine.
+            </p>
+
+            <div class="row">
+              <button class="btn primary" onclick="go('letters')">💌 Open Letters</button>
+              <button class="btn primary" onclick="go('loveletter')">💌 Open birthday Letter</button>
+              <button class="btn secondary" onclick="go('gallery')">🖼️ Open Gallery</button>
+              <button class="btn" onclick="go('slideshow')">🎞️ Slideshow</button>
+              <button class="btn" onclick="go('game')">🧠 Mini Game</button>
+            </div>
+
+            <p class="muted" style="margin-top:12px;">
+              Tip: Put your pictures in the same folder as this HTML, then edit the <b>photos</b> list in the code.
+            </p>
+          </div>
+
+          <div class="panel col-5">
+            <h3 style="margin:0 0 10px;">🎁 One small promise</h3>
+            <p style="margin:0; line-height:1.65; opacity:.92;">
+              I’ll keep choosing you — on the easy days, and on the hard ones too.
+              I’ll celebrate your wins, hold your hand through your worries,
+              and remind you that you are loved… loudly.
+              <br><br>
+              Happy birthday, my baby ❤️
+            </p>
+
+            <div style="height:12px"></div>
+            <button class="btn" onclick="confetti()">✨ Tap for sparkles</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <span class="muted">Made with ❤️ for Dewmi’s 19th</span>
+        <span class="muted">If music doesn’t start: tap anywhere once, then toggle Music On</span>
+      </footer>
+    </div>
+  </section>
+
+  <!-- LETTERS -->
+  <section id="letters" class="screen">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>💌 Letters for Dewmi</h1>
+          <p>Little pages of love — open them anytime.</p>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="go('home')">⬅ Back</button>
+          <button class="btn secondary" onclick="addLetter()">➕ Add a new letter</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="panel">
+          <div class="letters" id="lettersList"></div>
+          <p class="muted" style="margin:10px 0 0;">
+        
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- LOVE LETTER -->
+<section id="loveletter" class="screen">
+  <div class="card">
+    <header>
+      <div class="title">
+        <h1>💗 My Love Letter to Dewmi</h1>
+        <p>A personal birthday wish — from my heart to yours.</p>
+      </div>
+      <div class="row">
+        <button class="btn" onclick="go('home')">⬅ Back</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="panel">
+        <h3 style="margin:0 0 10px;">Happy 19th Birthday, Dewmi ❤️</h3>
+
+
+        <div id="typeTarget" style="white-space:pre-wrap; line-height:1.75; font-size:15px; opacity:.92;"></div>
+
+<div style="height:12px"></div>
+<div class="row">
+  <button class="btn primary" id="startTypeBtn">▶ Start typing</button>
+  <button class="btn" id="skipTypeBtn">⏭ Skip</button>
+  <button class="btn secondary" onclick="confetti()">✨ Make a wish</button>
+</div>
+
+        <!-- END EDIT AREA -->
+
+        <p class="muted" style="margin:10px 0 0;">
+
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- GALLERY -->
+  <section id="gallery" class="screen">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>🖼️ Our Photos</h1>
+          <p>Tap a photo to open it full screen.</p>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="go('home')">⬅ Back</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="panel">
+          <div class="gallery" id="galleryGrid"></div>
+          <p class="muted" style="margin:10px 0 0;">
+            Add your images in the <b>photos</b> array in the JS section.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDESHOW -->
+  <section id="slideshow" class="screen">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>🎞️ Slideshow</h1>
+          <p>A soft little movie of us.</p>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="go('home')">⬅ Back</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="panel slideBox">
+          <img id="slideImg" class="slideImg" alt="slideshow image" />
+          <div class="slideControls">
+            <div class="row">
+              <button class="btn" onclick="prevSlide()">⏮ Prev</button>
+              <button class="btn primary" onclick="toggleAuto()">▶ / ⏸ Auto</button>
+              <button class="btn" onclick="nextSlide()">Next ⏭</button>
+            </div>
+            <div class="muted" id="slideMeta"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" class="screen">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>🧠 Mini Game</h1>
+          <p>Match the pairs — win a kiss (redeemable anytime 😌)</p>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="go('home')">⬅ Back</button>
+          <button class="btn secondary" onclick="startGame()">🔁 Restart</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="panel">
+          <div class="row" style="justify-content:space-between; align-items:center;">
+            <div class="muted">Matches: <b id="matches">0</b> / <b id="totalPairs">0</b></div>
+            <div class="muted">Tries: <b id="tries">0</b></div>
+          </div>
+          <div style="height:10px"></div>
+          <div class="gameGrid" id="gameGrid"></div>
+          <div style="height:10px"></div>
+          <div class="muted" id="gameMsg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="overlay" id="overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modalHead">
+        <b id="modalTitle">Photo</b>
+        <div class="row">
+          <button class="btn" onclick="modalPrev()">⏮</button>
+          <button class="btn" onclick="modalNext()">⏭</button>
+          <button class="btn primary" onclick="closeModal()">Close ✖</button>
+        </div>
+      </div>
+      <div class="modalBody">
+        <img id="modalImg" class="modalImg" alt="full photo" />
+        <div id="modalCaption" class="modalCaption"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Music (put song1.mp3 in same folder as this HTML) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="song1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    /**************
+     * CUSTOMIZE
+     **************/
+    const NAME = "Dewmi";
+    const TURNING_AGE = 19;
+
+    // Put your image files in the same folder as this HTML, then list them here:
+    const photos = [
+      { src: "photo1.jpeg", caption: "My favourite kind of memory: you ❤️" },
+      { src: "photo2.jpeg", caption: "19 looks perfect on you ✨" },
+      { src: "photo3.jpeg", caption: "Every smile of yours is a whole sunrise." },
+      { src: "photo4.jpeg", caption: "More adventures with you, always." },
+      { src: "photo5.jpeg", caption: "You + me = ❤️" },
+      { src: "photo6.jpeg", caption: "Soft moments, loud laughs." },
+      { src: "photo7.jpeg", caption: "You make my world brighter." },
+        { src: "photo8.jpeg", caption: "Just us, being us." }, 
+        { src: "photo9.jpeg", caption: "Forever grateful for you." },
+        { src: "photo10.jpeg", caption: "To many more memories together." },
+        { src: "photo11.jpeg", caption: "You are my sunshine." },
+        { src: "photo12.jpeg", caption: "Every day with you is a gift." },
+        { src: "photo13.jpeg", caption: "You + me = ❤️" },
+        { src: "photo14.jpeg", caption: "You make my world brighter." },
+        { src: "photo15.jpeg", caption: "Just us, being us." },
+        { src: "photo16.jpeg", caption: "Forever grateful for you." },
+        { src: "photo17.jpeg", caption: "To many more memories together." },
+        { src: "photo18.jpeg", caption: "You are my sunshine." },
+        { src: "photo19.jpeg", caption: "Every day with you is a gift." },
+        { src: "photo20.jpeg", caption: "Cherishing every moment with you." },
+        { src: "photo21.jpeg", caption: "You light up my life." },
+        { src: "photo22.jpeg", caption: "Adventures are better with you." },
+        { src: "photo23.jpeg", caption: "You complete me." },
+        { src: "photo24.jpeg", caption: "Love you to the moon and back." },
+        { src: "photo25.jpeg", caption: "You are my forever." },
+        { src: "photo26.jpeg", caption: "With you, every moment is special." },
+        { src: "photo27.jpeg", caption: "You are my heart." },
+        { src: "photo28.jpeg", caption: "Together is my favorite place to be." },
+        { src: "photo29.jpeg", caption: "You make life beautiful." },
+        { src: "photo30.jpeg", caption: "My love for you grows every day." },
+        { src: "photo31.jpeg", caption: "You are my dream come true." },
+        { src: "photo32.jpeg", caption: "Forever and always, you and me." },
+        { src: "photo33.jpeg", caption: "You are my everything." },
+        { src: "photo34.jpeg", caption: "Life is better with you by my side." },
+        { src: "photo35.jpeg", caption: "You are my greatest adventure." },
+        { src: "photo36.jpeg", caption: "I fall in love with you more each day." },
+        { src: "photo37.jpeg", caption: "You are my happily ever after." },
+        { src: "photo38.jpeg", caption: "You make my heart smile." },
+        { src: "photo39.jpeg", caption: "You are my sunshine on a cloudy day." },
+        { src: "photo40.jpeg", caption: "I am so lucky to have you." },
+        { src: "photo41.jpeg", caption: "You are my best friend and soulmate." },
+        { src: "photo42.jpeg", caption: "You are the love of my life." },
+        { src: "photo43.jpeg", caption: "You make every day brighter." },
+        { src: "photo44.jpeg", caption: "You are my reason to smile." },
+        { src: "photo45.jpeg", caption: "I cherish every moment with you." },
+        { src: "photo46.jpeg", caption: "You are my forever and always." },
+        { src: "photo47.jpeg", caption: "You complete me in every way." },
+        { src: "photo48.jpeg", caption: "You are my heart's desire." },
+        { src: "photo49.jpeg", caption: "With you, life is an amazing journey." },
+      
+    ];
+
+    // Romantic letters (edit freely)
+    const lettersData = [
+      {
+        title: "Open on your birthday 🎂",
+        text:
+          `Happy ${TURNING_AGE}th birthday, Dewmi ❤️
+You are beautiful in the loud ways and in the quiet ways.
+I hope today feels soft, loved, and full of little moments that make you smile.
+I’m so proud of you. I’m so lucky to love you.`
+      },
+      {
+        title: "Open when you need reassurance 🫶",
+        text:
+          "You don’t have to be perfect to be loved — you already are. I believe in you, in your dreams, and in the way you keep going even when things feel heavy."
+      },
+      {
+        title: "Open when you miss me 💌",
+        text:
+          "Even when we’re not together, you’re still my favourite place. Close your eyes for a second and imagine me holding your hand — that’s real, that’s us."
+      },
+      {
+        title: "Open when you want to feel special ✨",
+        text:
+          "You’re not ‘just’ anything. You’re the kind of person who makes the world softer. The way you laugh, the way you care, the way you exist… it’s magic."
+      },
+      {
+        title: "Open when you want a reason I love you 💗",
+        text:
+          "Because you’re you. And somehow, you keep becoming even more you — stronger, kinder, brighter — and I fall for you again and again."
+      },
+    ];
+
+    /**************
+     * HELPERS
+     **************/
+    const $ = (id) => document.getElementById(id);
+
+    $("personName").textContent = NAME;
+
+    // Navigation
+    
+    function go(screenId){
+  // hide all screens
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+
+  // show the selected screen
+  $(screenId).classList.add("active");
+
+  // slideshow refresh
+  if (screenId === "slideshow") {
+    renderSlide();
+  }
+
+  // LOVE LETTER: reset + start typewriter
+  if (screenId === "loveletter") {
+    resetTypewriter();
+    startTypewriter();
+  }
+}
+
+    // Letters
+    function renderLetters(){
+      const wrap = $("lettersList");
+      wrap.innerHTML = "";
+      lettersData.forEach((l) => {
+        const div = document.createElement("div");
+        div.className = "letter";
+        div.innerHTML = `<h3>${escapeHtml(l.title)}</h3><p>${escapeHtml(l.text)}</p>`;
+        wrap.appendChild(div);
+      });
+    }
+    function addLetter(){
+      const title = prompt("Letter title (example: Open when you feel sad):");
+      if(!title) return;
+      const text = prompt("Write the message:");
+      if(!text) return;
+      lettersData.unshift({ title, text });
+      renderLetters();
+    }
+
+    // Gallery
+    function renderGallery(){
+      const grid = $("galleryGrid");
+      grid.innerHTML = "";
+
+      if(!photos.length){
+        const box = document.createElement("div");
+        box.className = "photo";
+        box.style.gridColumn = "1 / -1";
+        box.innerHTML = `<span>No photos yet. Add image filenames in the <b>photos</b> array in the code.</span>`;
+        grid.appendChild(box);
+        return;
+      }
+
+      photos.forEach((p, idx) => {
+        const tile = document.createElement("div");
+        tile.className = "photo";
+        tile.onclick = () => openModal(idx);
+
+        const img = document.createElement("img");
+        img.src = p.src;
+        img.alt = "photo";
+        img.onerror = () => {
+          tile.innerHTML = `<span>Missing file:<br><b>${escapeHtml(p.src)}</b><br><small>Put it in the same folder as this HTML.</small></span>`;
+        };
+
+        tile.appendChild(img);
+        grid.appendChild(tile);
+      });
+    }
+
+    // Modal
+    let modalIndex = 0;
+    function openModal(i){
+      modalIndex = i;
+      $("overlay").classList.add("show");
+      renderModal();
+    }
+    function closeModal(){
+      $("overlay").classList.remove("show");
+    }
+    function modalPrev(){
+      if(!photos.length) return;
+      modalIndex = (modalIndex - 1 + photos.length) % photos.length;
+      renderModal();
+    }
+    function modalNext(){
+      if(!photos.length) return;
+      modalIndex = (modalIndex + 1) % photos.length;
+      renderModal();
+    }
+    function renderModal(){
+      const p = photos[modalIndex];
+      $("modalTitle").textContent = `Photo ${modalIndex + 1} / ${photos.length}`;
+      $("modalImg").src = p?.src || "";
+      $("modalCaption").textContent = p?.caption || "";
+    }
+
+    // Slideshow
+    let slideIndex = 0;
+    let autoTimer = null;
+
+    function renderSlide(){
+      if(!photos.length){
+        $("slideImg").removeAttribute("src");
+        $("slideMeta").textContent = "Add photos in the photos array first 🙂";
+        return;
+      }
+      const p = photos[slideIndex];
+      $("slideImg").src = p.src;
+      $("slideMeta").textContent = `${slideIndex + 1} / ${photos.length} — ${p.caption || ""}`;
+    }
+    function nextSlide(){
+      if(!photos.length) return;
+      slideIndex = (slideIndex + 1) % photos.length;
+      renderSlide();
+    }
+    function prevSlide(){
+      if(!photos.length) return;
+      slideIndex = (slideIndex - 1 + photos.length) % photos.length;
+      renderSlide();
+    }
+    function toggleAuto(){
+      if(autoTimer){
+        clearInterval(autoTimer);
+        autoTimer = null;
+        return;
+      }
+      autoTimer = setInterval(nextSlide, 2500);
+    }
+
+    // Mini memory game
+    const emojis = ["💖","🎂","✨","🌸","🍓","🎀","💌","🫶"];
+    let firstPick = null;
+    let lock = false;
+    let matches = 0;
+    let tries = 0;
+    let totalPairs = 0;
+
+    function startGame(){
+      const picks = emojis.slice(0, 8);
+      const deck = shuffle([...picks, ...picks]);
+      const grid = $("gameGrid");
+      grid.innerHTML = "";
+      firstPick = null;
+      lock = false;
+      matches = 0;
+      tries = 0;
+      totalPairs = picks.length;
+
+      $("matches").textContent = matches;
+      $("tries").textContent = tries;
+      $("totalPairs").textContent = totalPairs;
+      $("gameMsg").textContent = "Tap two tiles to find a pair.";
+
+      deck.forEach((val) => {
+        const card = document.createElement("div");
+        card.className = "gameCard";
+        card.dataset.value = val;
+        card.textContent = "❓";
+
+        card.onclick = () => {
+          if(lock) return;
+          if(card.classList.contains("done")) return;
+          if(card === firstPick) return;
+
+          reveal(card);
+
+          if(!firstPick){
+            firstPick = card;
+            return;
+          }
+
+          tries++;
+          $("tries").textContent = tries;
+
+          if(firstPick.dataset.value === card.dataset.value){
+            firstPick.classList.add("done");
+            card.classList.add("done");
+            matches++;
+            $("matches").textContent = matches;
+            firstPick = null;
+
+            if(matches === totalPairs){
+              $("gameMsg").textContent = "YOU WON 🥳 Redeem: 1 hug + 1 kiss + unlimited love ❤️";
+              confetti();
+            }
+          } else {
+            lock = true;
+            setTimeout(() => {
+              hide(firstPick);
+              hide(card);
+              firstPick = null;
+              lock = false;
+            }, 700);
+          }
+        };
+
+        grid.appendChild(card);
+      });
+    }
+    function reveal(card){
+      card.classList.add("revealed");
+      card.textContent = card.dataset.value;
+    }
+    function hide(card){
+      card.classList.remove("revealed");
+      card.textContent = "❓";
+    }
+    function shuffle(arr){
+      for(let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Music (plays across whole site)
+    const music = $("bgMusic");
+    const toggleBtn = $("toggleMusicBtn");
+    let musicOn = false;
+
+    function setMusicUI(){
+      toggleBtn.textContent = musicOn ? "On" : "Off";
+    }
+
+    // Safe play: browsers require a user gesture
+    function tryPlayMusic(){
+      if(!musicOn) return;
+      music.play().catch(() => {
+        // If blocked, user just needs to click again; no crash.
+      });
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      musicOn = !musicOn;
+      setMusicUI();
+      if(musicOn) tryPlayMusic();
+      else music.pause();
+    });
+
+    // If user taps anywhere and music is ON, we try again (fixes autoplay restrictions)
+    document.addEventListener("pointerdown", () => {
+      tryPlayMusic();
+    }, { passive:true });
+
+    // Confetti
+    function confetti(){
+      const count = 120;
+      for(let i=0;i<count;i++){
+        const dot = document.createElement("div");
+        dot.style.position="fixed";
+        dot.style.left = Math.random()*100 + "vw";
+        dot.style.top = "-10px";
+        dot.style.width = "10px";
+        dot.style.height = "10px";
+        dot.style.borderRadius = "3px";
+        dot.style.background = `hsl(${Math.random()*360}, 90%, 65%)`;
+        dot.style.zIndex = 99999;
+        dot.style.pointerEvents = "none";
+        document.body.appendChild(dot);
+
+        const fall = 1200 + Math.random()*2000;
+        const drift = (Math.random()*2-1) * 80;
+
+        dot.animate([
+          { transform:`translate(0,0) rotate(0deg)`, opacity:1 },
+          { transform:`translate(${drift}px, ${fall}px) rotate(${Math.random()*720}deg)`, opacity:0.9 }
+        ], { duration: 3200 + Math.random()*2200, easing:"ease-out" });
+
+        setTimeout(()=>dot.remove(), 6000);
+
+      }
+    }
+
+    // Hearts background animation (canvas)
+    const canvas = $("hearts");
+    const ctx = canvas.getContext("2d");
+    let W, H, hearts = [];
+
+    function resize(){
+      W = canvas.width = window.innerWidth * devicePixelRatio;
+      H = canvas.height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function spawnHeart(){
+      const x = Math.random() * window.innerWidth;
+      const y = window.innerHeight + 30;
+      const size = 10 + Math.random() * 18;
+      const speed = 0.6 + Math.random() * 1.6;
+      const drift = (Math.random() * 2 - 1) * 0.6;
+      const wobble = 0.8 + Math.random() * 1.5;
+      const hue = 330 + Math.random() * 25; // pink/red range
+      hearts.push({ x, y, size, speed, drift, wobble, hue, t: Math.random()*1000 });
+    }
+
+    function drawHeart(x, y, s, hue, alpha){
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(s/20, s/20);
+      ctx.globalAlpha = alpha;
+
+      ctx.beginPath();
+      // heart shape
+      ctx.moveTo(0, 6);
+      ctx.bezierCurveTo(-12, -4, -18, 10, 0, 20);
+      ctx.bezierCurveTo(18, 10, 12, -4, 0, 6);
+      ctx.closePath();
+
+      ctx.fillStyle = `hsl(${hue}, 90%, 65%)`;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function tick(){
+      ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+
+      // keep a steady stream
+      if (hearts.length < 50) spawnHeart();
+      if (Math.random() < 0.25) spawnHeart();
+
+      for (let i = hearts.length - 1; i >= 0; i--){
+        const h = hearts[i];
+        h.t += 0.02;
+        h.y -= h.speed * 2.2;
+        h.x += h.drift * 2 + Math.sin(h.t * h.wobble) * 0.6;
+
+        const alpha = Math.max(0, Math.min(1, (h.y / window.innerHeight)));
+        drawHeart(h.x, h.y, h.size, h.hue, 0.55 + (1 - alpha) * 0.35);
+
+        if (h.y < -40) hearts.splice(i, 1);
+      }
+
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+// --- Typewriter Love Letter ---
+const loveLetterText = `My dearest Dewmi,
+
+Happy 19th birthday, my love ❤️
+I hope today reminds you how special you are — not just today, but every single day.
+
+its almost been 3 years since we met, and every moment with you has been a treasure. Your kindness, your laughter, your beautiful soul they light up my world in ways I never thought possible. now you are turning 19 i've seen yo grow ever since 16 the happy days we had and the sad days all was such a wonderfull memory, I am forever greatfull for meeting you baby! you'll always be my princess no matter what we will make it baby! enjoy your birthday have fun, laugh, smile, make a lot for friends and i will always be loving you from the shadows forver. again happy birthday my beautifull stunning princess. I wll be forever proud to scream to the world that your are mine! remember study hard! do your best! i know that you are the most special person in this world. You are kind, beautifull, smart you are genuinly a princess from a dinsey movie, baby remember we will grow old together so brace yourself for a very fun ride!
+And again happy birthday my love! I love your so very much!
+
+No matter where life takes us, Im always cheering for you, always choosing you, and always loving you.
+
+Forever yours,
+— wishu`;
+
+let typingTimer = null;
+let typingIndex = 0;
+let typingDone = false;
+
+function startTypewriter(){
+  const target = document.getElementById("typeTarget");
+  if(!target) return;
+
+  if(typingDone) return;
+  if(typingIndex === 0) target.textContent = "";
+
+  const speed = 22;
+
+  typingTimer = setInterval(() => {
+    target.textContent += loveLetterText[typingIndex] || "";
+    typingIndex++;
+
+    if(typingIndex >= loveLetterText.length){
+      clearInterval(typingTimer);
+      typingTimer = null;
+      typingDone = true;
+    }
+  }, speed);
+}
+
+function skipTypewriter(){
+  const target = document.getElementById("typeTarget");
+  if(!target) return;
+
+  if(typingTimer){
+    clearInterval(typingTimer);
+    typingTimer = null;
+  }
+  target.textContent = loveLetterText;
+  typingIndex = loveLetterText.length;
+  typingDone = true;
+}
+
+function resetTypewriter(){
+  if(typingTimer){
+    clearInterval(typingTimer);
+    typingTimer = null;
+  }
+  typingIndex = 0;
+  typingDone = false;
+  const target = document.getElementById("typeTarget");
+  if(target) target.textContent = "";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const startBtn = document.getElementById("startTypeBtn");
+  const skipBtn  = document.getElementById("skipTypeBtn");
+  if(startBtn) startBtn.addEventListener("click", startTypewriter);
+  if(skipBtn)  skipBtn.addEventListener("click", skipTypewriter);
+});
+
+
+    // Init
+    renderLetters();
+    renderGallery();
+    renderSlide();
+    startGame();
+    setMusicUI();
+  </script>
+</body>
+</html>     
